@@ -34,7 +34,9 @@
     "test:client": "turbo run test --filter=./packages/client",
     "test:core": "turbo run test --filter=./packages/core",
     "test:app": "turbo run test --concurrency 5 --filter=./packages/app",
-    "prepare": "husky"
+    "prepare": "husky",
+    "autonomous": "bash scripts/autonomous-build.sh && bun start",
+    "ecosystem:improve": "node scripts/improve-ecosystem.js"
   },
   "packageManager": "bun@1.2.15",
   "workspaces": [
