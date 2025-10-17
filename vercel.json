@@ -1,0 +1,35 @@
+{
+  "version": 2,
+  "name": "xmrt-eliza-autonomous",
+  "builds": [
+    {
+      "src": "packages/cli/package.json",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "packages/cli/dist/index.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "packages/cli/dist/index.js"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production",
+    "LOG_LEVEL": "debug",
+    "AUTONOMOUS_MODE": "true"
+  },
+  "functions": {
+    "packages/cli/dist/index.js": {
+      "maxDuration": 300,
+      "memory": 3008
+    }
+  },
+  "regions": [
+    "iad1"
+  ],
+  "framework": "other"
+}
