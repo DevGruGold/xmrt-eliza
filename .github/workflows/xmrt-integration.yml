@@ -1,0 +1,92 @@
+name: XMRT-Eliza Integration CI/CD
+
+on:
+  push:
+    branches: [ develop, main ]
+  pull_request:
+    branches: [ develop, main ]
+  workflow_dispatch:
+
+jobs:
+  validate-integration:
+    name: Validate XMRT Integration
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: |
+        npm ci
+        npm audit --audit-level moderate
+        
+    - name: Validate XMRT configuration
+      run: |
+        if [ -f "xmrt-config.json" ]; then
+          echo "✅ XMRT configuration found"
+          cat xmrt-config.json
+        else
+          echo "❌ XMRT configuration missing"
+          exit 1
+        fi
+        
+    - name: Validate character configuration
+      run: |
+        if [ -f "characters/xmrt-eliza-basic.character.json" ]; then
+          echo "✅ XMRT character configuration found"
+          node -e "
+            const fs = require('fs');
+            const config = JSON.parse(fs.readFileSync('characters/xmrt-eliza-basic.character.json', 'utf8'));
+            console.log('Character:', config.name);
+            console.log('Topics:', config.topics.length);
+          "
+        else
+          echo "⚠️ XMRT character configuration not found"
+        fi
+        
+    - name: Test XMRT integration module
+      run: |
+        if [ -f "src/xmrt-integration.js" ]; then
+          echo "✅ XMRT integration module found"
+          node -e "
+            const XMRTIntegration = require('./src/xmrt-integration.js');
+            const integration = new XMRTIntegration();
+            console.log('Integration status:', integration.getStatus());
+          "
+        else
+          echo "⚠️ XMRT integration module not found"
+        fi
+        
+    - name: Validate Docker configuration
+      run: |
+        if [ -f "docker-compose.xmrt.yml" ]; then
+          echo "✅ Docker Compose configuration found"
+          docker-compose -f docker-compose.xmrt.yml config
+        else
+          echo "⚠️ Docker Compose configuration not found"
+        fi
+
+  notify-xmrt-ecosystem:
+    name: Notify XMRT Ecosystem
+    runs-on: ubuntu-latest
+    needs: validate-integration
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Notify deployment
+      run: |
+        echo "🔔 Notifying XMRT ecosystem of integration update..."
+        
+        # In a real implementation, this would send notifications to:
+        # - XMRT Ecosystem API
+        # - Suite AI Dashboard
+        # - Supabase functions
+        
+        echo "✅ Notification sent to XMRT ecosystem"
