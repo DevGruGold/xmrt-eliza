@@ -1,0 +1,15 @@
+# Ignore complex build artifacts
+packages/
+node_modules/
+.turbo/
+bun.lock
+*.lock
+.git/
+.github/workflows/
+docs/
+scripts/
+
+# Keep only essential files
+!index.js
+!vercel.json
+!package.json
