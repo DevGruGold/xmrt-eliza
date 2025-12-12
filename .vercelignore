@@ -1,15 +1,37 @@
-# Ignore complex build artifacts
+# Ignore ALL complex build files and directories
 packages/
 node_modules/
 .turbo/
-bun.lock
 *.lock
+bun.lock*
+pnpm-lock.yaml
+yarn.lock
 .git/
-.github/workflows/
+.github/
 docs/
 scripts/
+*.md
+README*
+CHANGELOG*
+LICENSE*
 
-# Keep only essential files
+# Ignore TypeScript and build configs
+tsconfig*.json
+*.config.js
+*.config.ts
+webpack*
+rollup*
+vite*
+
+# Ignore development files
+.env*
+!.env.example
+.vscode/
+.idea/
+*.log
+
+# Keep only essential files for deployment
 !index.js
 !vercel.json
 !package.json
+!package-simple.json
