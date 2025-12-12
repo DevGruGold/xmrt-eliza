@@ -1,35 +1,30 @@
 {
   "version": 2,
-  "name": "xmrt-eliza-autonomous",
+  "name": "xmrt-eliza",
+  "framework": null,
+  "buildCommand": "echo 'Skipping complex build, using simple setup'",
+  "outputDirectory": "./",
+  "installCommand": "npm install express cors axios",
+  "devCommand": "node index.js",
   "builds": [
     {
-      "src": "packages/cli/package.json",
+      "src": "index.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "packages/cli/dist/index.js"
-    },
-    {
       "src": "/(.*)",
-      "dest": "packages/cli/dist/index.js"
+      "dest": "/index.js"
     }
   ],
-  "env": {
-    "NODE_ENV": "production",
-    "LOG_LEVEL": "debug",
-    "AUTONOMOUS_MODE": "true"
-  },
   "functions": {
-    "packages/cli/dist/index.js": {
-      "maxDuration": 300,
-      "memory": 3008
+    "index.js": {
+      "memory": 1024,
+      "maxDuration": 30
     }
   },
-  "regions": [
-    "iad1"
-  ],
-  "framework": "other"
+  "env": {
+    "NODE_ENV": "production"
+  }
 }
