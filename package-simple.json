@@ -1,0 +1,15 @@
+{
+  "name": "xmrt-eliza-simple",
+  "version": "1.0.0",
+  "description": "XMRT-Eliza simple deployment",
+  "main": "index.js",
+  "type": "commonjs",
+  "engines": {
+    "node": "18.x"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "build": "echo 'No build needed'",
+    "dev": "node index.js"
+  }
+}
